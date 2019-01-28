@@ -1,2 +1,6 @@
 
 *.class
+
+nbproject/private/private\.xml
+
+*.xml
