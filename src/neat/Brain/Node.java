@@ -1,4 +1,4 @@
-package neat;
+package neat.Brain;
 
 public class Node {
 

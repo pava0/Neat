@@ -1,5 +1,7 @@
 package neat;
 
+import neat.Brain.Brain;
+import java.util.ArrayList;
 import processing.core.PVector;
 
 public class Creature implements Comparable {
@@ -20,6 +22,8 @@ public class Creature implements Comparable {
 
     private PVector position;
     private PVector actualFood;
+
+    private final ArrayList<String> infos = new ArrayList<>();
 
     Creature(Neat main) {
         this.main = main;
@@ -104,17 +108,26 @@ public class Creature implements Comparable {
             creatureColor = main.color(125, 125, 125);
         }
     }
+    
+    public Creature Clone() {
+        Creature _new = new Creature(main);
+        
+        return _new;
+    }
 
-    void drawInfoSquare() {
-        main.fill(0);
-        main.rect(0, 0, 100, 100);
-        main.fill(255);
-        main.text(main.creatures.indexOf(this), 10, 10);
+    ArrayList<String> getInfos() {
+        infos.clear();
+        infos.add("Score: " + score);
 
+        return infos;
     }
 
     boolean isDead() {
         return isDead;
+    }
+
+    float getScore() {
+        return score;
     }
 
 }

@@ -6,15 +6,16 @@ import processing.core.PVector;
 
 public class Neat extends PApplet {
 
-    final int nOfSquareInInstance = 5;                                              //number of square in single instance
-    final int nOfCreaturePerSide = 5;                                               //number of creature per side
-    final int windowsWidth = 800;                                                   //width of window
-    final int windowsHeight = 600;
+    final int nOfSquareInInstance = 10;                                              //number of square in single instance
+    final int nOfCreaturePerSide = 10;                                               //number of creature per side
+    final int windowsWidth = 1100;                                                   //width of window
+    final int windowsHeight = 900;
     final int leftSide = 20;
     final int upSide = 20;
-    final int rightSide = 150;
-    final int downSide = 75;
+    final int rightSide = 200;
+    final int downSide = 20;
     int windowPlay;
+    int menuWidth;
 
     final ArrayList<PVector> seeds = new ArrayList<>();                             //list of (common) seeds
     final int numberOfSeeds = 500;                                                  //number of total seeds
@@ -34,21 +35,19 @@ public class Neat extends PApplet {
     int maxNumberOfStepBeforeKill = 30;                                             //max number of steps before a creature is killed
     int pointsPerFood = 10;                                                         //number of points taken from eating
 
-    ArrayList<Creature> creatures;
-    EvolutionManager evolManager;
-
-    public PApplet main;
+    final ArrayList<String> infos = new ArrayList<>();
+    final ArrayList<Creature> creatures = new ArrayList<>();
+    
+    final EvolutionManager evolManager = new EvolutionManager();
+    Creature selected;
 
     @Override
     public void settings() {
         size(windowsWidth, windowsHeight);
-        main = this;
     }
 
     @Override
     public void setup() {
-        //evolManager = new EvolutionManager(creatures);
-
         counterUpdateCreature = millis();
 
         float tmpSide1, tmpSide2;
@@ -60,6 +59,8 @@ public class Neat extends PApplet {
         } else {
             windowPlay = (int) tmpSide1;
         }
+
+        menuWidth = windowsWidth - windowPlay - leftSide;
 
         sizeOfSquareInInstance = windowPlay / (nOfSquareInInstance * nOfCreaturePerSide);
         sizeOfInstance = Math.round(windowPlay / nOfCreaturePerSide);
@@ -74,21 +75,21 @@ public class Neat extends PApplet {
             }
         }
 
-        creatures = new ArrayList<>();
-
         for (int i = 0; i < nOfCreaturePerSide * nOfCreaturePerSide; i++) {
             creatures.add(new Creature(this));
         }
 
         _posToDrawCreature = new PVector(0, 0);
 
-        textSize(10);
+        textSize(12);
+        textAlign(LEFT, TOP);
     }
 
     void Update() {
         if (lastMs - counterUpdateCreature > timeToUpdateCreature && pause == false) {
             creatures.forEach((c) -> {
                 c.Calculate();
+                
             });
             counterUpdateCreature = millis();
         }
@@ -122,7 +123,7 @@ public class Neat extends PApplet {
         creatures.forEach((c) -> {
             pushMatrix();
 
-            translate(_posToDrawCreature.x * (sizeOfInstance), _posToDrawCreature.y * sizeOfInstance/*+ (positionCreaturesOnScreen.y + 1) * offset*/);
+            translate(_posToDrawCreature.x * sizeOfInstance, _posToDrawCreature.y * sizeOfInstance);
             c.Draw();
 
             _posToDrawCreature.x++;
@@ -134,23 +135,36 @@ public class Neat extends PApplet {
             popMatrix();
         });
         //////////////////////////////////////////
+        
+        popMatrix();
 
-        PVector creatureOnMouse = new PVector((float) Math.floor(getMouseOnWorld().x / sizeOfInstance), (float) Math.floor(getMouseOnWorld().y / sizeOfInstance));
-        int indexCreatureMouse = (int) (creatureOnMouse.y * nOfSquareInInstance + creatureOnMouse.x);
+        ////////////Draw infos/////////////////////
+        pushMatrix();
+        translate(windowsWidth - menuWidth, upSide);
 
-        if (indexCreatureMouse >= 0 && indexCreatureMouse < Math.pow(nOfCreaturePerSide, 2)) {
-            translate(getMouseOnWorld().x + 20, getMouseOnWorld().y + 20);
-            creatures.get(indexCreatureMouse).drawInfoSquare();
+        infos.clear();
+        if (selected != null) {
+            addInfos("Selected: " + creatures.indexOf(selected));
+            infos.addAll(selected.getInfos());
+        } else {
+            addInfos("Selected: false");
         }
 
-        //////////////Draw Brain////////////////////////////////
-        ////////////////////////////////////////////////////////
+        for (int i = 0; i < infos.size(); i++) {
+            text(infos.get(i), 10, i * 15);
+        }
+        ///////////////////////////////////////////
+
         Update();
 
         popMatrix();
 
         lastMs = millis();
 
+    }
+
+    public void addInfos(String s) {
+        infos.add(s);
     }
 
     PVector getMouseOnWorld() {
@@ -171,9 +185,17 @@ public class Neat extends PApplet {
     @Override
     public void mouseClicked() {
         if (mouseButton == LEFT) {
-            creatures.forEach((c) -> {
-                c.Move(new PVector(0, -1));
-            });
+
+            int xPositon = (int) Math.floor(getMouseOnWorld().x / sizeOfInstance);
+            int yPositon = (int) Math.floor(getMouseOnWorld().y / sizeOfInstance);
+
+            if (xPositon < 0 || xPositon >= nOfCreaturePerSide || yPositon < 0 || yPositon >= nOfCreaturePerSide) {
+                selected = null;
+            } else {
+                int indexCreatureMouse = (int) (yPositon * nOfSquareInInstance + xPositon);
+
+                selected = creatures.get(indexCreatureMouse);
+            }
 
         }
     }
