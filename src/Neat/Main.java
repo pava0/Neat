@@ -1,9 +1,9 @@
-package neat;
+package Neat;
 
 public class Main {
 
     public static void main(String[] args) {
-        Neat.main("neat.Neat");
+        Neat.main("Neat.Neat");
     }
     
 }

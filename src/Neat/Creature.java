@@ -1,6 +1,6 @@
-package neat;
+package Neat;
 
-import neat.Brain.Brain;
+import Neat.Brain.Genome;
 import java.util.ArrayList;
 import processing.core.PVector;
 
@@ -8,9 +8,9 @@ public class Creature implements Comparable {
 
     private final Neat main;
 
-    Brain brain;
+    Genome genome;
 
-    int creatureColor, targetColor;
+    private int creatureColor, targetColor;
 
     private boolean isDead = false;
 
@@ -57,7 +57,7 @@ public class Creature implements Comparable {
         position = new PVector(0, (int) Math.round(main.nOfCreaturePerSide / 2f));
         actualFood = main.seeds.get(indexFood);
 
-        brain = new Brain();
+        genome = new Genome(main);
     }
 
     void Draw() {
@@ -108,16 +108,18 @@ public class Creature implements Comparable {
             creatureColor = main.color(125, 125, 125);
         }
     }
-    
+
     public Creature Clone() {
         Creature _new = new Creature(main);
-        
+
         return _new;
     }
 
     ArrayList<String> getInfos() {
         infos.clear();
         infos.add("Score: " + score);
+        infos.add("-Genome: ");
+        infos.addAll(genome.getInfos());
 
         return infos;
     }

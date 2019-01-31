@@ -1,4 +1,4 @@
-package neat;
+package Neat;
 
 import java.util.ArrayList;
 import java.util.Collections;

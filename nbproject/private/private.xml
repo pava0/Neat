@@ -3,13 +3,12 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/D:/Documenti/NetBeansProjects/Neat/src/neat/EvolutionManager.java</file>
-            <file>file:/D:/Documenti/NetBeansProjects/Neat/src/neat/Brain.java</file>
-            <file>file:/D:/Documenti/NetBeansProjects/Neat/src/neat/Node.java</file>
-            <file>file:/D:/Documenti/NetBeansProjects/Neat/src/neat/Genome.java</file>
-            <file>file:/D:/Documenti/NetBeansProjects/Neat/src/neat/Neat.java</file>
-            <file>file:/D:/Documenti/NetBeansProjects/Neat/src/neat/Gene.java</file>
-            <file>file:/D:/Documenti/NetBeansProjects/Neat/src/neat/Creature.java</file>
+            <file>file:/D:/Documenti/NetBeansProjects/Neat/src/Neat/Neat.java</file>
+            <file>file:/D:/Documenti/NetBeansProjects/Neat/src/Neat/Brain/ConnectionGene.java</file>
+            <file>file:/D:/Documenti/NetBeansProjects/Neat/src/Neat/Brain/Node.java</file>
+            <file>file:/D:/Documenti/NetBeansProjects/Neat/src/Neat/Brain/Genome.java</file>
+            <file>file:/D:/Documenti/NetBeansProjects/Neat/src/Neat/Creature.java</file>
+            <file>file:/D:/Documenti/NetBeansProjects/Neat/src/Neat/EvolutionManager.java</file>
         </group>
     </open-files>
 </project-private>

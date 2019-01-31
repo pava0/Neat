@@ -1,4 +1,4 @@
-package neat;
+package Neat;
 
 import processing.core.PApplet;
 import java.util.*;
@@ -8,12 +8,14 @@ public class Neat extends PApplet {
 
     final int nOfSquareInInstance = 10;                                              //number of square in single instance
     final int nOfCreaturePerSide = 10;                                               //number of creature per side
-    final int windowsWidth = 1100;                                                   //width of window
+    final int windowsWidth = 1300;                                                   //width of window
     final int windowsHeight = 900;
     final int leftSide = 20;
     final int upSide = 20;
-    final int rightSide = 200;
+    final int rightSide = 250;
     final int downSide = 20;
+    final int borderFromNetwork = 20;
+    int sideDrawNetwork;
     int windowPlay;
     int menuWidth;
 
@@ -37,7 +39,7 @@ public class Neat extends PApplet {
 
     final ArrayList<String> infos = new ArrayList<>();
     final ArrayList<Creature> creatures = new ArrayList<>();
-    
+
     final EvolutionManager evolManager = new EvolutionManager();
     Creature selected;
 
@@ -61,6 +63,8 @@ public class Neat extends PApplet {
         }
 
         menuWidth = windowsWidth - windowPlay - leftSide;
+
+        sideDrawNetwork = menuWidth - 2 * borderFromNetwork;
 
         sizeOfSquareInInstance = windowPlay / (nOfSquareInInstance * nOfCreaturePerSide);
         sizeOfInstance = Math.round(windowPlay / nOfCreaturePerSide);
@@ -89,7 +93,7 @@ public class Neat extends PApplet {
         if (lastMs - counterUpdateCreature > timeToUpdateCreature && pause == false) {
             creatures.forEach((c) -> {
                 c.Calculate();
-                
+
             });
             counterUpdateCreature = millis();
         }
@@ -110,9 +114,9 @@ public class Neat extends PApplet {
         translate(leftSide, upSide);
 
         //Griglia
+        stroke(0);
+        strokeWeight(1f);
         for (int i = 0; i <= nOfCreaturePerSide; i++) {
-            fill(0);
-
             float actualPos = i * sizeOfInstance;
             line(0, actualPos, windowPlay, actualPos);
             float nextPos = (i + 1) * sizeOfInstance;
@@ -135,7 +139,7 @@ public class Neat extends PApplet {
             popMatrix();
         });
         //////////////////////////////////////////
-        
+
         popMatrix();
 
         ////////////Draw infos/////////////////////
@@ -150,14 +154,25 @@ public class Neat extends PApplet {
             addInfos("Selected: false");
         }
 
+        textAlign(LEFT, TOP);
+        textSize(12);
         for (int i = 0; i < infos.size(); i++) {
             text(infos.get(i), 10, i * 15);
         }
-        ///////////////////////////////////////////
-
-        Update();
 
         popMatrix();
+        ///////////////////////////////////////////
+
+        pushMatrix();
+
+        translate(width - (sideDrawNetwork + borderFromNetwork), height - (sideDrawNetwork + borderFromNetwork));
+        if (selected != null) {
+            selected.genome.DrawNetworkWithForceDirectedGraph(sideDrawNetwork);
+        }
+
+        popMatrix();
+
+        Update();
 
         lastMs = millis();
 
@@ -197,6 +212,18 @@ public class Neat extends PApplet {
                 selected = creatures.get(indexCreatureMouse);
             }
 
+        }
+    }
+    @Override
+    public void keyPressed() {
+        if(key == 'h') {
+            if(selected != null) {
+                selected.genome.addConnectionMutation();
+            }
+        }else if(key == 'k') {
+            if(selected != null) {
+                selected.genome.addNodeMutation();
+            }
         }
     }
 }
