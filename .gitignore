@@ -1,8 +1,0 @@
-
-*.class
-
-nbproject/private/private\.xml
-
-*.xml
-/dist/
-build/built-jar\.properties
